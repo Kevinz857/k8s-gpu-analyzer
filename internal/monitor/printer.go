@@ -5,7 +5,7 @@ import (
 	"os"
 	"text/tabwriter"
 
-	"github.com/Kevin857/k8s-gpu-analyzer/pkg/types"
+	"github.com/Kevinz857/k8s-gpu-analyzer/pkg/types"
 )
 
 // PrintGPUNodeInfo prints GPU node information in table format

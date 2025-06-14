@@ -1,4 +1,4 @@
-module github.com/Kevin857/k8s-gpu-analyzer
+module github.com/Kevinz857/k8s-gpu-analyzer
 
 go 1.21
 
