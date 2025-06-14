@@ -79,19 +79,38 @@ jobs:
           - ARM64: `k8s-gpu-analyzer-windows-arm64.exe`
           
           ### Quick Start
+          
+          **Linux:**
           ```bash
-          # Make executable (Linux/macOS)
-          chmod +x k8s-gpu-analyzer-*
-          
-          # Run with default settings
+          # Make executable and run
+          chmod +x k8s-gpu-analyzer-linux-amd64
           ./k8s-gpu-analyzer-linux-amd64
+          ```
           
+          **macOS:**
+          ```bash
+          # Make executable and remove quarantine
+          chmod +x k8s-gpu-analyzer-darwin-arm64
+          xattr -d com.apple.quarantine k8s-gpu-analyzer-darwin-arm64 2>/dev/null || true
+          ./k8s-gpu-analyzer-darwin-arm64
+          ```
+          
+          **Note for macOS users:** If you see security warnings, go to System Preferences → Security & Privacy → General and click "Allow Anyway".
+          
+          ### Examples
+          ```bash
           # Custom node labels and namespaces
           ./k8s-gpu-analyzer-linux-amd64 --node-labels "gpu=true" --namespaces "default,kube-system"
+          
+          # Monitor specific GPU nodes
+          ./k8s-gpu-analyzer-linux-amd64 --node-labels "instance-type=p3.2xlarge"
           ```
           
           ### Verification
-          Use `checksums.txt` to verify download integrity.
+          Use checksums.txt to verify download integrity:
+          ```bash
+          sha256sum -c checksums.txt
+          ```
         files: |
           bin/k8s-gpu-analyzer-linux-amd64
           bin/k8s-gpu-analyzer-linux-arm64

@@ -51,12 +51,34 @@ chmod +x k8s-gpu-analyzer-linux-arm64
 # Intel
 wget https://github.com/Kevinz857/k8s-gpu-analyzer/releases/latest/download/k8s-gpu-analyzer-darwin-amd64
 chmod +x k8s-gpu-analyzer-darwin-amd64
+
+# Remove quarantine attribute (required for unsigned binaries)
+xattr -d com.apple.quarantine k8s-gpu-analyzer-darwin-amd64 2>/dev/null || true
+
 ./k8s-gpu-analyzer-darwin-amd64
 
 # Apple Silicon
 wget https://github.com/Kevinz857/k8s-gpu-analyzer/releases/latest/download/k8s-gpu-analyzer-darwin-arm64
 chmod +x k8s-gpu-analyzer-darwin-arm64
+
+# Remove quarantine attribute (required for unsigned binaries)
+xattr -d com.apple.quarantine k8s-gpu-analyzer-darwin-arm64 2>/dev/null || true
+
 ./k8s-gpu-analyzer-darwin-arm64
+```
+
+**Alternative for macOS (if you see security warnings):**
+```bash
+# Method 1: Use command line to bypass Gatekeeper
+sudo spctl --master-disable  # Temporarily disable Gatekeeper
+./k8s-gpu-analyzer-darwin-arm64
+sudo spctl --master-enable   # Re-enable Gatekeeper
+
+# Method 2: Manual approval (recommended)
+# 1. Try to run the binary (it will fail with security warning)
+# 2. Go to System Preferences → Security & Privacy → General
+# 3. Click "Allow Anyway" next to the blocked app message
+# 4. Run the binary again and click "Open" when prompted
 ```
 
 **Windows:**
