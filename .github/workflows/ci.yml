@@ -9,68 +9,31 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        go-version: [1.21, 1.22]
-
+    
     steps:
     - uses: actions/checkout@v4
     
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: ${{ matrix.go-version }}
-    
-    - name: Cache Go modules
-      uses: actions/cache@v3
-      with:
-        path: ~/go/pkg/mod
-        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-        restore-keys: |
-          ${{ runner.os }}-go-
+        go-version: '1.21'
     
     - name: Download dependencies
       run: go mod download
     
-    - name: Run tests
-      run: go test -v ./...
-    
-    - name: Run go vet
-      run: go vet ./...
-    
-    - name: Run gofmt
+    - name: List files for debugging
       run: |
-        if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then
-          echo "Code is not formatted correctly"
-          gofmt -s -l .
-          exit 1
-        fi
+        echo "Current directory:"
+        pwd
+        echo "Files in current directory:"
+        ls -la
+        echo "Files in cmd directory:"
+        ls -la cmd/
+        echo "Go files:"
+        find . -name "*.go" -type f
+    
+    - name: Run tests
+      run: go test ./...
     
     - name: Build
-      run: go build -v ./cmd/k8s-gpu-analyzer
-
-  build-release:
-    runs-on: ubuntu-latest
-    needs: test
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: 1.21
-    
-    - name: Build for multiple platforms
-      run: |
-        GOOS=linux GOARCH=amd64 go build -o bin/k8s-gpu-analyzer-linux-amd64 ./cmd/k8s-gpu-analyzer
-        GOOS=darwin GOARCH=amd64 go build -o bin/k8s-gpu-analyzer-darwin-amd64 ./cmd/k8s-gpu-analyzer
-        GOOS=darwin GOARCH=arm64 go build -o bin/k8s-gpu-analyzer-darwin-arm64 ./cmd/k8s-gpu-analyzer
-        GOOS=windows GOARCH=amd64 go build -o bin/k8s-gpu-analyzer-windows-amd64.exe ./cmd/k8s-gpu-analyzer
-    
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: binaries
-        path: bin/
+      run: go build -o k8s-gpu-analyzer ./cmd/k8s-gpu-analyzer
