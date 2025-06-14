@@ -29,8 +29,52 @@
 
 ## Installation and Build
 
+### Option 1: Download Pre-built Binaries (Recommended)
+
+Download the latest release from [GitHub Releases](https://github.com/Kevinz857/k8s-gpu-analyzer/releases):
+
+**Linux:**
 ```bash
-# Clone or download the project
+# AMD64
+wget https://github.com/Kevinz857/k8s-gpu-analyzer/releases/latest/download/k8s-gpu-analyzer-linux-amd64
+chmod +x k8s-gpu-analyzer-linux-amd64
+./k8s-gpu-analyzer-linux-amd64
+
+# ARM64
+wget https://github.com/Kevinz857/k8s-gpu-analyzer/releases/latest/download/k8s-gpu-analyzer-linux-arm64
+chmod +x k8s-gpu-analyzer-linux-arm64
+./k8s-gpu-analyzer-linux-arm64
+```
+
+**macOS:**
+```bash
+# Intel
+wget https://github.com/Kevinz857/k8s-gpu-analyzer/releases/latest/download/k8s-gpu-analyzer-darwin-amd64
+chmod +x k8s-gpu-analyzer-darwin-amd64
+./k8s-gpu-analyzer-darwin-amd64
+
+# Apple Silicon
+wget https://github.com/Kevinz857/k8s-gpu-analyzer/releases/latest/download/k8s-gpu-analyzer-darwin-arm64
+chmod +x k8s-gpu-analyzer-darwin-arm64
+./k8s-gpu-analyzer-darwin-arm64
+```
+
+**Windows:**
+```powershell
+# AMD64
+Invoke-WebRequest -Uri https://github.com/Kevinz857/k8s-gpu-analyzer/releases/latest/download/k8s-gpu-analyzer-windows-amd64.exe -OutFile k8s-gpu-analyzer.exe
+.\k8s-gpu-analyzer.exe
+
+# ARM64
+Invoke-WebRequest -Uri https://github.com/Kevinz857/k8s-gpu-analyzer/releases/latest/download/k8s-gpu-analyzer-windows-arm64.exe -OutFile k8s-gpu-analyzer.exe
+.\k8s-gpu-analyzer.exe
+```
+
+### Option 2: Build from Source
+
+```bash
+# Clone the project
+git clone https://github.com/Kevinz857/k8s-gpu-analyzer.git
 cd k8s-gpu-analyzer
 
 # Download dependencies
