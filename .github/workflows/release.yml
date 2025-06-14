@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -17,12 +20,10 @@ jobs:
       with:
         go-version: '1.21'
     
-    - name: Get version
-      id: version
-      run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-    
     - name: Build binaries
       run: |
+        mkdir -p bin
+        
         # Linux AMD64
         GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/k8s-gpu-analyzer-linux-amd64 ./cmd/k8s-gpu-analyzer
         
@@ -48,15 +49,11 @@ jobs:
         cd ..
     
     - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v1
       with:
-        tag_name: ${{ steps.version.outputs.VERSION }}
-        release_name: Release ${{ steps.version.outputs.VERSION }}
+        name: Release ${{ github.ref_name }}
         body: |
-          ## 🚀 K8s GPU Analyzer ${{ steps.version.outputs.VERSION }}
+          ## 🚀 K8s GPU Analyzer ${{ github.ref_name }}
           
           ### Features
           - 🔍 Smart GPU node discovery and analysis
@@ -95,75 +92,13 @@ jobs:
           
           ### Verification
           Use `checksums.txt` to verify download integrity.
+        files: |
+          bin/k8s-gpu-analyzer-linux-amd64
+          bin/k8s-gpu-analyzer-linux-arm64
+          bin/k8s-gpu-analyzer-darwin-amd64
+          bin/k8s-gpu-analyzer-darwin-arm64
+          bin/k8s-gpu-analyzer-windows-amd64.exe
+          bin/k8s-gpu-analyzer-windows-arm64.exe
+          bin/checksums.txt
         draft: false
         prerelease: false
-    
-    - name: Upload Linux AMD64
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./bin/k8s-gpu-analyzer-linux-amd64
-        asset_name: k8s-gpu-analyzer-linux-amd64
-        asset_content_type: application/octet-stream
-    
-    - name: Upload Linux ARM64
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./bin/k8s-gpu-analyzer-linux-arm64
-        asset_name: k8s-gpu-analyzer-linux-arm64
-        asset_content_type: application/octet-stream
-    
-    - name: Upload macOS AMD64
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./bin/k8s-gpu-analyzer-darwin-amd64
-        asset_name: k8s-gpu-analyzer-darwin-amd64
-        asset_content_type: application/octet-stream
-    
-    - name: Upload macOS ARM64
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./bin/k8s-gpu-analyzer-darwin-arm64
-        asset_name: k8s-gpu-analyzer-darwin-arm64
-        asset_content_type: application/octet-stream
-    
-    - name: Upload Windows AMD64
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./bin/k8s-gpu-analyzer-windows-amd64.exe
-        asset_name: k8s-gpu-analyzer-windows-amd64.exe
-        asset_content_type: application/octet-stream
-    
-    - name: Upload Windows ARM64
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./bin/k8s-gpu-analyzer-windows-arm64.exe
-        asset_name: k8s-gpu-analyzer-windows-arm64.exe
-        asset_content_type: application/octet-stream
-    
-    - name: Upload Checksums
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./bin/checksums.txt
-        asset_name: checksums.txt
-        asset_content_type: text/plain
