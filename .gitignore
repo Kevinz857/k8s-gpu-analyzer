@@ -4,8 +4,8 @@
 *.dll
 *.so
 *.dylib
-k8s-gpu-analyzer
-gpu-monitor
+/k8s-gpu-analyzer
+/gpu-monitor
 
 # Test binary, built with `go test -c`
 *.test
