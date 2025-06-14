@@ -2,7 +2,7 @@
 
 [![Go Version](https://img.shields.io/github/go-mod/go-version/Kevinz857/k8s-gpu-analyzer)](https://github.com/Kevinz857/k8s-gpu-analyzer)
 [![Release](https://img.shields.io/github/v/release/Kevinz857/k8s-gpu-analyzer)](https://github.com/Kevinz857/k8s-gpu-analyzer/releases)
-[![License](https://img.shields.io/github/license/Kevinz857/k8s-gpu-analyzer)](https://github.com/Kevinz857/k8s-gpu-analyzer/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/Kevinz857/k8s-gpu-analyzer)](https://github.com/Kevinz857/k8s-gpu-analyzer/blob/master/LICENSE)
 [![CI](https://github.com/Kevinz857/k8s-gpu-analyzer/workflows/CI/badge.svg)](https://github.com/Kevinz857/k8s-gpu-analyzer/actions)
 [![Stars](https://img.shields.io/github/stars/Kevinz857/k8s-gpu-analyzer?style=social)](https://github.com/Kevinz857/k8s-gpu-analyzer)
 
